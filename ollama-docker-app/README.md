@@ -220,8 +220,18 @@ The setup includes volume mounts for development:
 3. Add health checks and dependencies
 4. Update `start-all.sh` if needed
 
-## Additional Resources
-- [Ollama Documentation](https://ollama.com)
-- [SelfDB Documentation](./SelfDB/README.md)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+## 🌐 Remote Access
+
+Both UIs are configured to work from remote devices and VPN networks:
+
+- **Ollama UI**: http://your-server-ip:3050
+- **SelfDB UI**: http://your-server-ip:3000
+
+The nginx reverse proxy handles API routing using relative paths, so all requests work correctly from any network.
+
+### Troubleshooting Remote Access
+
+If you get connection errors:
+1. Ensure Docker containers are running: `docker-compose ps`
+2. Check firewall settings allow ports 3000, 3050, 8000, 8001, 8090
+3. Verify Ollama service is accessible: `curl http://your-server-ip:11434/api/tags`
