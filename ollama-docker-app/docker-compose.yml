@@ -11,6 +11,26 @@ services:
     environment:
       - OLLAMA_HOST=0.0.0.0:11434
       - OLLAMA_ORIGINS=*
+      # Enable parallel request processing (adjust based on your hardware)
+      - OLLAMA_NUM_PARALLEL=4  # Allow 4 concurrent requests
+      - OLLAMA_MAX_LOADED_MODELS=1  # Keep 1 model in memory
+      # Optional: Set max queue size to prevent overwhelming the system
+      - OLLAMA_MAX_QUEUE=10  # Maximum 10 requests in queue
+    # Resource limits to prevent one service from consuming all resources
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'  # Adjust based on your system
+          memory: 8G   # Adjust based on your model size
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+          # Uncomment the following section if you have an NVIDIA GPU on Linux system 
+          # This will significantly improve performance and allow more concurrent users
+          # devices:
+          #   - driver: nvidia
+          #     count: 1  # or 'all' to use all available GPUs
+          #     capabilities: [gpu]
     healthcheck:
       test: ["CMD", "ollama", "list"]
       interval: 5s
