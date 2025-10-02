@@ -1,6 +1,24 @@
 #!/bin/bash
 # Quick Start Script - Fastest Setup
 
+# Check if first argument is "rebuild-ui"
+if [ "$1" = "rebuild-ui" ]; then
+    echo "🔨 Rebuilding UI Docker container..."
+    echo ""
+
+    echo "📦 Rebuilding UI service with latest changes..."
+    docker-compose build ui
+
+    echo ""
+    echo "🚀 Restarting UI service..."
+    docker-compose up -d ui
+
+    echo ""
+    echo "✅ UI container rebuilt and restarted successfully!"
+    echo "🌐 UI is available at: http://localhost:3000"
+    exit 0
+fi
+
 echo "🚀 Setting up Ollama with fastest configuration..."
 echo ""
 
@@ -48,3 +66,6 @@ echo "   python3 main.py"
 echo ""
 echo "💡 Next time you run 'docker-compose -f docker-compose.yml up -d'"
 echo "   it will start in just 5-10 seconds!"
+echo ""
+echo "🔧 Additional commands:"
+echo "   ./quick-start.sh rebuild-ui  # Rebuild UI Docker container with latest code changes"

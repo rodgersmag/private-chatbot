@@ -78,16 +78,16 @@ const App: React.FC = () => {
 
     return (
         <div className="flex flex-col h-screen bg-slate-50 font-sans text-gray-800">
-            <header className="flex items-center p-4">
+            <header className="flex items-center p-2">
                 <AiIcon />
                 <div className="ml-3">
-                    <h1 className="text-lg font-semibold text-gray-800">Private Chat</h1>
-                    <p className="text-sm text-gray-500">{model}</p>
+                    <h1 className="text-lg font-semibold text-gray-800 m-0 leading-tight">Private Chat</h1>
+                    <p className="text-xs text-gray-500 m-0 leading-tight">{model}</p>
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-6">
-                <div className="max-w-3xl mx-auto">
+            <main className="flex-1 overflow-y-auto p-3">
+                <div className="max-w-5xl mx-auto">
                     {messages.length === 0 ? (
                         <div className="text-center mt-20">
                             <h2 className="text-4xl font-bold text-gray-700">What can I help with?</h2>
