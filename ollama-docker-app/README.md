@@ -102,44 +102,58 @@ curl -X POST http://localhost:11434/api/generate \
 
 ## Management Commands
 
-### Rebuilding Services
+### Starting Services
 ```bash
-# Rebuild UI services only
-./start-all.sh rebuild-ui
+# Start all services (Ollama + SelfDB)
+./start-all.sh
 
-# Rebuild backend services only
-./start-all.sh rebuild-backend
-
-# Rebuild specific service
-docker-compose build <service_name>
-```
-
-### Viewing Logs
-```bash
-# All services
-docker-compose logs -f
-
-# Specific service
-docker-compose logs -f ollama
-docker-compose logs -f backend
+# Start specific services only
+docker-compose up -d ollama ui    # Just Ollama services
+docker-compose up -d postgres backend frontend  # Just SelfDB services
 ```
 
 ### Stopping Services
 ```bash
 # Stop all services
+./stop-all.sh
+
+# Stop specific services
+docker-compose stop ollama ui
+```
+
+### Rebuilding Services
+```bash
+# Rebuild all services (preserves data)
+./rebuild-all.sh
+
+# Rebuild specific services
+./start-all.sh rebuild-ui      # Rebuild UI containers only
+./start-all.sh rebuild-backend # Rebuild backend containers only
+
+# Rebuild individual services
+docker-compose build ollama
+docker-compose build backend
+```
+
+### Cleanup and Reset
+```bash
+# Clean up everything (⚠️ DELETES ALL DATA)
+./cleanup-all.sh
+
+# Quick reset (stop and remove containers, keep volumes)
 docker-compose down
 
-# Stop and remove volumes (⚠️  destroys data)
+# Nuclear reset (remove containers and volumes)
 docker-compose down -v
 ```
 
-### Checking Status
+### Testing
 ```bash
-# Service status
-docker-compose ps
+# Run SelfDB test suite (requires services to be running)
+./test-selfdb.sh
 
-# Resource usage
-docker stats
+# Run tests manually from SelfDB directory
+cd SelfDB/tests && uv run run_all_tests.py
 ```
 
 ## Configuration

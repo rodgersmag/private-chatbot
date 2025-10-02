@@ -26,7 +26,8 @@ services:
     depends_on:
       - ollama
     environment:
-      - VITE_OLLAMA_URL=/ollama
+      - VITE_OLLAMA_URL=${VITE_OLLAMA_URL}
+      - VITE_DEFAULT_MODEL=${VITE_DEFAULT_MODEL}
     networks:
       - selfdb_network
 
