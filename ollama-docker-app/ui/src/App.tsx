@@ -47,10 +47,17 @@ const App: React.FC = () => {
                     updateLastMessage(fullContent);
                 }
             }
-        } catch (error: any) {
-            if (error.name !== 'AbortError') {
+        } catch (error) {
+            if (error instanceof DOMException && error.name === 'AbortError') {
+                return;
+            }
+
+            if (error instanceof Error) {
                 console.error('Stream error:', error);
-                updateLastMessage('Error: ' + error.message);
+                updateLastMessage(`Error: ${error.message}`);
+            } else {
+                console.error('Stream error:', error);
+                updateLastMessage('Error: An unexpected issue occurred.');
             }
         } finally {
             setIsLoading(false);
