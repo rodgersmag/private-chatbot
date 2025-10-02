@@ -25,7 +25,7 @@ services:
         reservations:
           cpus: '2.0'
           memory: 4G
-          # Uncomment the following section if you have an NVIDIA GPU on Linux system 
+          # Uncomment the following section if you have an NVIDIA GPU on Linux system and Ensure you have NVIDIA Docker runtime installed
           # This will significantly improve performance and allow more concurrent users
           # devices:
           #   - driver: nvidia
