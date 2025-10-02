@@ -1,0 +1,17 @@
+
+
+services:
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./scripts:/app
+    command: ["/app/run-model.sh"]
+    ports:
+      - "11434:11434"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "ollama list 2>/dev/null | grep -q 'qwen3:1.7b' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 60
