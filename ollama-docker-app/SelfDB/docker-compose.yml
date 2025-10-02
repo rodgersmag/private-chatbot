@@ -1,35 +1,5 @@
 
 services:
-  # Ollama AI Service
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      # Persist models between restarts - this is the key!
-      - ollama-data:/root/.ollama
-    environment:
-      - OLLAMA_HOST=0.0.0.0:11434
-    healthcheck:
-      test: ["CMD", "ollama", "list"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-    networks:
-      - selfdb_network
-
-  # Ollama UI Service
-  ui:
-    build: ./ui
-    ports:
-      - "3050:80"
-    depends_on:
-      - ollama
-    environment:
-      - VITE_OLLAMA_URL=/ollama
-    networks:
-      - selfdb_network
-
   # PostgreSQL Database Service
   postgres:
     image: postgres:18 # PostgreSQL 18 introduces new PGDATA layout and volume semantics
@@ -62,7 +32,7 @@ services:
   # Storage Service (FastAPI-based file storage)
   storage_service:
     build:
-      context: ./SelfDB/storage_service
+      context: ./storage_service
       dockerfile: Dockerfile
     container_name: selfdb_storage_service
     environment:
@@ -75,7 +45,7 @@ services:
       - BASE_URL=http://localhost
     volumes:
       - selfdb_files:/data/storage
-      - ./SelfDB/storage_service/app:/app/app
+      - ./storage_service/app:/app/app
     ports:
       - "8001:8001"
     depends_on:
@@ -84,7 +54,7 @@ services:
     restart: unless-stopped
     networks:
       - selfdb_network
-
+      
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
       interval: 10s
@@ -95,7 +65,7 @@ services:
   # Backend API Service (FastAPI)
   backend:
     build:
-      context: ./SelfDB/backend # Specifies the build context directory
+      context: ./backend # Specifies the build context directory
       dockerfile: Dockerfile # Specifies the Dockerfile name
     container_name: selfdb_backend
     env_file:
@@ -103,10 +73,10 @@ services:
       - .env
     volumes:
       # Mounts the backend application code directory for hot-reloading during development
-      - ./SelfDB/backend/app:/app/app
-      - ./SelfDB/backend/alembic:/app/alembic
-      - ./SelfDB/backend/alembic.ini:/app/alembic.ini
-      - ./SelfDB/backend/scripts:/app/scripts
+      - ./backend/app:/app/app
+      - ./backend/alembic:/app/alembic
+      - ./backend/alembic.ini:/app/alembic.ini
+      - ./backend/scripts:/app/scripts
       # Mount functions_data volume instead of local folder
       - functions_data:/functions
     ports:
@@ -121,7 +91,7 @@ services:
     restart: unless-stopped
     networks:
       - selfdb_network
-
+      
     command: /bin/bash -c "/app/scripts/init.sh && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
     healthcheck: # Added healthcheck for the backend
       test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
@@ -133,7 +103,7 @@ services:
   # Frontend Service (React App served by Nginx)
   frontend:
     build:
-      context: ./SelfDB/frontend
+      context: ./frontend
       dockerfile: Dockerfile
       # Pass the API URL as a build argument for production builds
       args:
@@ -149,7 +119,7 @@ services:
     restart: unless-stopped
     networks:
       - selfdb_network
-
+      
 
   # Deno Runtime Service for Cloud Functions
   deno-runtime:
@@ -166,7 +136,7 @@ services:
       # Mount the functions_data volume to /functions
       - functions_data:/functions
       # Mount the local server.ts to a temporary location for preloading
-      - ./SelfDB/functions/server.ts:/app/server.ts.original
+      - ./functions/server.ts:/app/server.ts.original
     working_dir: /functions
     # Command to preload server.ts if not present, then run it
     command: >
@@ -187,20 +157,19 @@ services:
     restart: unless-stopped
     networks:
       - selfdb_network
-
+    
 
 # Custom Bridge Network
 # Allows containers to communicate with each other using service names
 networks:
   selfdb_network:
     driver: bridge
-
+  # External network for Nginx proxy manager 
+  
 
 # Named volumes for data persistence
 # These volumes will be managed by Docker and persist across container lifecycles
 volumes:
-  ollama-data:
-    driver: local
   postgres_data:
     driver: local
   selfdb_files:
