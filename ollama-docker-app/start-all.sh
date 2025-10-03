@@ -97,6 +97,9 @@ fi
 echo "✅ Found ANON_KEY in .env file: ${ANON_KEY_CHECK:0:5}..."
 echo "✅ ANON_KEY is now synchronized with the backend."
 
+# Source environment variables from .env
+source .env
+
 echo ""
 echo "📦 Starting all services..."
 docker-compose up -d
@@ -114,13 +117,13 @@ for i in {1..30}; do
 done
 
 echo ""
-echo "📥 Checking if model qwen3:1.7b is available..."
+echo "📥 Checking if model ${VITE_DEFAULT_MODEL} is available..."
 # Check if model exists
-if docker-compose exec -T ollama ollama list | grep -q "qwen3:1.7b"; then
-    echo "✅ Model qwen3:1.7b already cached!"
+if docker-compose exec -T ollama ollama list | grep -q "${VITE_DEFAULT_MODEL}"; then
+    echo "✅ Model ${VITE_DEFAULT_MODEL} already cached!"
 else
-    echo "📦 Model not found. Downloading qwen3:1.7b (this may take 2-5 minutes on first run)..."
-    docker-compose exec -T ollama ollama pull qwen3:1.7b
+    echo "📦 Model not found. Downloading ${VITE_DEFAULT_MODEL} (this may take 2-5 minutes on first run)..."
+    docker-compose exec -T ollama ollama pull ${VITE_DEFAULT_MODEL}
     echo "✅ Model downloaded successfully!"
 fi
 

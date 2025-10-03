@@ -3,6 +3,10 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Set build arguments
+ARG VITE_OLLAMA_URL
+ARG VITE_DEFAULT_MODEL
+
 # Copy package files
 COPY package*.json ./
 

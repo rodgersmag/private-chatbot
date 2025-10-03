@@ -2,7 +2,7 @@
 
 ## Overview
 This project provides a unified Dockerized environment that combines:
-- **Ollama AI Service**: Runs the `qwen3:1.7b` model for AI chat capabilities
+- **Ollama AI Service**: Runs the `granite4:micro-h` model for AI chat capabilities
 - **SelfDB Backend**: A full-stack database and API platform with PostgreSQL, FastAPI backend, React frontend, and cloud functions
 
 The setup includes all necessary configurations and scripts to run both services seamlessly together.
@@ -42,7 +42,7 @@ The easiest way to get everything running:
 This will:
 1. Set up environment variables and generate API keys
 2. Start all services (Ollama, SelfDB backend, databases, etc.)
-3. Download the qwen3:1.7b model if not present
+3. Download the granite4:micro-h model if not present
 4. Wait for all services to be healthy
 5. Display service URLs
 
@@ -92,7 +92,7 @@ Or use curl directly:
 ```bash
 curl -X POST http://localhost:11434/api/generate \
   -H "Content-Type: application/json" \
-  -d '{"model": "qwen3:1.7b", "prompt": "Hello, how are you?"}'
+  -d '{"model": "granite4:micro-h", "prompt": "Hello, how are you?"}'
 ```
 
 ### Using SelfDB
@@ -189,7 +189,7 @@ docker system df
 **Ollama model not downloading:**
 ```bash
 # Manual download
-docker-compose exec ollama ollama pull qwen3:1.7b
+docker-compose exec ollama ollama pull granite4:micro-h
 ```
 
 **Database connection issues:**

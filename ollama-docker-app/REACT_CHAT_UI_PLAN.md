@@ -9,7 +9,7 @@
 ## Backend Context Snapshot
 - `docker-compose.yml` launches the official `ollama/ollama` image, exposing port `11434`.
 - `main.py` demonstrates Python-side streaming via `/api/chat` and fallback `/api/generate` calls.
-- `quick-start.sh` ensures model `qwen3:1.7b` is available and highlights expected environment variables (`OLLAMA_URL`, `OLLAMA_MODEL`).
+- `quick-start.sh` ensures model `granite4:micro-h` is available and highlights expected environment variables (`OLLAMA_URL`, `OLLAMA_MODEL`).
 - No HTTP proxy or REST facade currently exists; the UI will hit Ollama directly or through a thin proxy to address CORS and secrets.
 
 ## High-Level Architecture

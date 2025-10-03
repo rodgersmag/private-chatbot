@@ -17,7 +17,7 @@ interface ChatStore {
 
 export const useChatStore = create<ChatStore>((set) => ({
   messages: [],
-  model: 'qwen3:1.7b',
+  model: import.meta.env.VITE_DEFAULT_MODEL,
   
   addUserMessage: (content) => {
     set((state) => ({

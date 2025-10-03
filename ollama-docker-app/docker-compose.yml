@@ -41,7 +41,12 @@ services:
 
   # Ollama UI Service
   ui:
-    build: ./ui
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      args:
+        VITE_OLLAMA_URL: ${VITE_OLLAMA_URL}
+        VITE_DEFAULT_MODEL: ${VITE_DEFAULT_MODEL}
     ports:
       - "3050:80"
     depends_on:

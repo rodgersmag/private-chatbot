@@ -12,7 +12,7 @@ Usage:
 
 Configure:
   OLLAMA_URL    - set host (default http://localhost:11434)
-  OLLAMA_MODEL  - default model (default qwen3:1.7b)
+  OLLAMA_MODEL  - default model (default granite4:micro-h)
 """
 
 import os
@@ -20,10 +20,13 @@ import sys
 import json
 import time
 
+from dotenv import load_dotenv
+load_dotenv()
+
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 CHAT_ENDPOINT = f"{OLLAMA_URL}/api/chat"
 GENERATE_ENDPOINT = f"{OLLAMA_URL}/api/generate"
-DEFAULT_MODEL = os.getenv("OLLAMA_MODEL", "qwen3:1.7b")
+DEFAULT_MODEL = os.getenv("OLLAMA_MODEL", "granite4:micro-h")
 
 try:
     import requests

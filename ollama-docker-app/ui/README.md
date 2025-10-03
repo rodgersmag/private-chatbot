@@ -150,7 +150,7 @@ Create `.env`:
 
 ```env
 VITE_OLLAMA_URL=/ollama
-VITE_DEFAULT_MODEL=qwen3:1.7b
+VITE_DEFAULT_MODEL=granite4:micro-h
 ```
 
 ## 🎯 Keyboard Shortcuts
