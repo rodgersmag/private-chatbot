@@ -157,6 +157,10 @@ for i in {1..30}; do
 done
 
 echo ""
+echo "🔧 Initializing chat tables..."
+./scripts/init_chat_tables.sh
+
+echo ""
 echo "✨ All services are now running!"
 echo ""
 echo "🌐 Service URLs:"
