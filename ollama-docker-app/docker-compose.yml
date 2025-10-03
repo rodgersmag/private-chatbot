@@ -47,6 +47,8 @@ services:
       args:
         VITE_OLLAMA_URL: ${VITE_OLLAMA_URL}
         VITE_DEFAULT_MODEL: ${VITE_DEFAULT_MODEL}
+        VITE_API_URL: ${REACT_APP_API_URL:-/api/v1}
+        VITE_ANON_KEY: ${ANON_KEY}
     ports:
       - "3050:80"
     depends_on:
@@ -54,6 +56,8 @@ services:
     environment:
       - VITE_OLLAMA_URL=${VITE_OLLAMA_URL}
       - VITE_DEFAULT_MODEL=${VITE_DEFAULT_MODEL}
+      - VITE_API_URL=${REACT_APP_API_URL:-/api/v1}
+      - VITE_ANON_KEY=${ANON_KEY}
     networks:
       - selfdb_network
 

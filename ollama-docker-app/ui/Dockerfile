@@ -6,12 +6,14 @@ WORKDIR /app
 # Set build arguments
 ARG VITE_OLLAMA_URL
 ARG VITE_DEFAULT_MODEL
+ARG VITE_API_URL
+ARG VITE_ANON_KEY
 
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source files
 COPY . .

@@ -4,8 +4,25 @@ import { ollamaAPI } from './lib/api';
 import ChatBubble from './components/ChatBubble';
 import MessageInput from './components/MessageInput';
 import { AiIcon } from './components/Icons';
+import { useAuth } from './store/auth';
+import Login from './components/Login';
+import { MdLogout } from 'react-icons/md';
 
 const App: React.FC = () => {
+    const { user, loading, logout } = useAuth();
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-lg">Loading...</div>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return <Login />;
+    }
+
     const [inputValue, setInputValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { messages, model, addUserMessage, addAssistantMessage, updateLastMessage } = useChatStore();
@@ -44,9 +61,10 @@ const App: React.FC = () => {
             for await (const { content: chunk } of stream) {
                 if (chunk) {
                     fullContent += chunk;
-                    updateLastMessage(fullContent);
                 }
             }
+
+            updateLastMessage(fullContent);
         } catch (error) {
             if (error instanceof DOMException && error.name === 'AbortError') {
                 return;
@@ -85,12 +103,21 @@ const App: React.FC = () => {
 
     return (
         <div className="flex flex-col h-screen bg-slate-50 font-sans text-gray-800">
-            <header className="flex items-center p-2">
-                <AiIcon />
-                <div className="ml-3">
-                    <h1 className="text-lg font-semibold text-gray-800 m-0 leading-tight">Private Chat</h1>
-                    <p className="text-xs text-gray-500 m-0 leading-tight">{model}</p>
+            <header className="flex items-center justify-between p-2">
+                <div className="flex items-center">
+                    <AiIcon />
+                    <div className="ml-3">
+                        <h1 className="text-lg font-semibold text-gray-800 m-0 leading-tight">Private Chat</h1>
+                        <p className="text-xs text-gray-500 m-0 leading-tight">{model}</p>
+                    </div>
                 </div>
+                <button
+                    onClick={logout}
+                    className="p-2 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded"
+                    title="Logout"
+                >
+                    <MdLogout size={20} />
+                </button>
             </header>
 
             <main className="flex-1 overflow-y-auto p-3">
